@@ -94,8 +94,8 @@ public class UserInterface
         
         contentPane.add(statusBar, BorderLayout.SOUTH);
 
-        frame.setPreferredSize(new Dimension(430, 430));
-        frame.setMinimumSize(new Dimension(390, 350));
+        frame.setPreferredSize(new Dimension(630, 430));
+        frame.setMinimumSize(new Dimension(590, 350));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
     }

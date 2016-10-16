@@ -98,7 +98,7 @@ public class Postfix {
 	    return true;
 	}
 	
-	private String[] removeEmptyElements(String[] sA){
+	public static String[] removeEmptyElements(String[] sA){
 		ArrayList<String> list = new ArrayList<String>();
 
 	    for(String s : sA){
