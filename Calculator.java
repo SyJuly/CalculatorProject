@@ -19,7 +19,7 @@ public class Calculator
     public Calculator()
     {
         engine = new CalcEngine();
-        gui = new UserInterface(engine);
+        gui = new HexaInterface(engine);
     }
 
     /**
