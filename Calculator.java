@@ -11,7 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Calculator
 {
     private CalcEngine engine;
-    private UserInterface gui;
+    private HexaInterface gui;
 
     /**
      * Create a new calculator and show it.

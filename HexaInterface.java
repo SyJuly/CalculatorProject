@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
@@ -33,7 +34,11 @@ public class HexaInterface extends UserInterface {
         		hexMode = boxCheck.isSelected();
         		for(int i = 1; i < buttonPanel.getComponentCount(); ++i)
         			buttonPanel.getComponent(i).setEnabled(hexMode);
-        		redisplay();
+        		if (hexMode){
+        			display.setText("" + convertTo(display.getText(),"hex"));
+        		} else{
+        			display.setText("" + convertTo(display.getText(),"dec"));
+        		}
         	}
         });
 		
@@ -53,63 +58,58 @@ public class HexaInterface extends UserInterface {
 	public void actionPerformed(ActionEvent event) {
 		String command = event.getActionCommand();
 
-        if(command.equals("0") ||
-           command.equals("1") ||
-           command.equals("2") ||
-           command.equals("3") ||
-           command.equals("4") ||
-           command.equals("5") ||
-           command.equals("6") ||
-           command.equals("7") ||
-           command.equals("8") ||
-           command.equals("9") ||
-           command.equals("A") ||
-           command.equals("B") ||
-           command.equals("C") ||
-           command.equals("D") ||
-           command.equals("E") ||
-           command.equals("F")) {
-        	int number;
-        	if(hexMode) {
-        		number = Integer.parseInt(command, 16);
-        		calc.numberPressed(number, 16);
-        	}
-        	else {
-        		number = Integer.parseInt(command, 10);
-        		calc.numberPressed(number);
-        	}
-        }
-        else if(command.equals("+")) {
-            calc.plus();
-        }
-        else if(command.equals("-")) {
-            calc.minus();
-        }
-        else if(command.equals("=")) {
-            calc.equals();
-        }
-        else if(command.equals("CE")) {
+		if(command.equals("CE")) {
             calc.clear();
-        }
-        else if(command.equals("*")) {
-            calc.multiply();
-        }
-        else if(command.equals("/")) {
-            calc.divide();
-        }
-        else if(command.equals("?")) {
+            redisplay();
+        }else if(command.equals("?")) {
         	showInfo();
+        }else if(command.equals("=")) {
+        	calc.setDisplayValue(display.getText());
+        	if(hexMode) {
+        		calc.setDisplayValue(convertTo(display.getText(),"dec"));
+        	}
+        	calc.calculateResult();
+        	redisplay();
+        }else{
+        	display.setText(display.getText()+command);
         }
-        // else unknown command.
-
-        redisplay();
 		
+	}
+	
+	public String convertTo(String input, String toMode){
+		String s = input.replaceAll("[^(|)|\\+|\\*|\\-|\\/|(|)|^|a-z|A-Z|0-9]+", "");
+		String r = "";
+		String[] nums = s.split("\\+|\\-|\\*|\\/|\\^|\\(|\\)+");
+		String[] chars = s.split("[a-zA-Z0-9]+");
+		int opCounter = 1;
+		if (s.startsWith("(")){
+			r = "(";
+			opCounter = 0;
+		}
+		if(!input.equals("")){
+			for (String num: nums){
+				if (toMode.equals("hex")){
+					r += Integer.toHexString(Integer.parseInt(num)).toUpperCase();
+				}
+				else if (toMode.equals("dec")){
+					r += Integer.parseInt(num, 16);
+				}
+				else{
+					throw new IllegalArgumentException();
+				}
+				if(opCounter <=chars.length-1){
+					r += chars[opCounter];
+					opCounter++;
+				}
+			}
+		}
+		return r;
 	}
 	
 	@Override
 	public void redisplay(){
 		if (hexMode){
-			display.setText("" + Integer.toHexString(calc.getDisplayValue()).toUpperCase());
+			display.setText("" + convertTo(calc.getDisplayValue(),"hex"));
 		} else{
 			display.setText("" + calc.getDisplayValue());
 		}

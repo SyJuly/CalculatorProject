@@ -62,22 +62,27 @@ public class UserInterface
             addButton(buttonPanel, "8");
             addButton(buttonPanel, "9");
             addButton(buttonPanel, "CE");
+            buttonPanel.add(new JLabel(" "));
             
             addButton(buttonPanel, "4");
             addButton(buttonPanel, "5");
             addButton(buttonPanel, "6");
             addButton(buttonPanel, "*");
+            addButton(buttonPanel, "^");
             
             addButton(buttonPanel, "1");
             addButton(buttonPanel, "2");
             addButton(buttonPanel, "3");
             addButton(buttonPanel, "/");
-            //buttonPanel.add(new JLabel(" "));
+            addButton(buttonPanel, "(");
             
             addButton(buttonPanel, "0");
             addButton(buttonPanel, "+");
             addButton(buttonPanel, "-");
             addButton(buttonPanel, "=");
+            addButton(buttonPanel, ")");
+            
+            
             
         contentPane.add(buttonPanel, BorderLayout.CENTER);
 
@@ -115,44 +120,18 @@ public class UserInterface
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-
-        if(command.equals("0") ||
-           command.equals("1") ||
-           command.equals("2") ||
-           command.equals("3") ||
-           command.equals("4") ||
-           command.equals("5") ||
-           command.equals("6") ||
-           command.equals("7") ||
-           command.equals("8") ||
-           command.equals("9")) {
-            int number = Integer.parseInt(command);
-            calc.numberPressed(number);
-        }
-        else if(command.equals("+")) {
-            calc.plus();
-        }
-        else if(command.equals("-")) {
-            calc.minus();
-        }
-        else if(command.equals("=")) {
-            calc.equals();
-        }
-        else if(command.equals("CE")) {
+        if(command.equals("CE")) {
             calc.clear();
-        }
-        else if(command.equals("*")) {
-            calc.multiply();
-        }
-        else if(command.equals("/")) {
-            calc.divide();
-        }
-        else if(command.equals("?")) {
+            redisplay();
+        }else if(command.equals("?")) {
         	showInfo();
+        }else if(command.equals("=")) {
+        	calc.setDisplayValue(display.getText());
+        	calc.calculateResult();
+        	redisplay();
+        }else{
+        	display.setText(display.getText()+command);
         }
-        // else unknown command.
-
-        redisplay();
     }
 
     /**
@@ -161,7 +140,7 @@ public class UserInterface
      */
     protected void redisplay()
     {
-        display.setText("" + calc.getDisplayValue());
+        display.setText(calc.getDisplayValue());
     }
 
     /**
